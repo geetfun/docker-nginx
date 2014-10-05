@@ -1,8 +1,7 @@
 # CentOS 7 + Nginx
-
-FROM andrefernandes/docker-centos7-base
-
-MAINTAINER Andre Fernandes
+# Original work Andre Fernandes
+FROM geetfun/docker-centos7-base
+MAINTAINER Simon Chiu
 
 # Based on the official "dockerfile/nginx" image
 # and with bits from "internavenue/centos-nginx"
