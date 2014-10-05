@@ -1,28 +1,25 @@
-# Pull base image.
-FROM dockerfile/ubuntu
-MAINTAINER Simon Chiu
+# CentOS 7 + Nginx
 
-# Install Nginx.
-RUN \
-  add-apt-repository -y ppa:nginx/stable && \
-  apt-get update && \
-  apt-get install -y nginx && \
-  rm -rf /var/lib/apt/lists/* && \
-  echo "\ndaemon off;" >> /etc/nginx/nginx.conf && \
-  chown -R www-data:www-data /var/lib/nginx
+FROM andrefernandes/docker-centos7-base
+
+MAINTAINER Andre Fernandes
+
+# Based on the official "dockerfile/nginx" image
+# and with bits from "internavenue/centos-nginx"
+
+RUN yum install nginx -y && \
+    yum clean all
 
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf && \
     echo "include /etc/nginx/sites-enabled/*;" >> /etc/nginx/conf.d/nginx-sites.conf
 
-# Define mountable directories.
-VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/etc/nginx/conf.d", "/var/log/nginx", "/usr/share/nginx/html"]
+WORKDIR /opt
 
-# Define working directory.
-WORKDIR /etc/nginx
+# Define mountable directories. Focus on reusability, felxibility, bla bla bla
+VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/etc/nginx/conf.d", "/var/log/nginx","/usr/share/nginx/html"]
 
-# Expose ports.
-EXPOSE 80
-EXPOSE 443
+EXPOSE 80 443
 
 # Define default command.
 CMD ["nginx"]
+
